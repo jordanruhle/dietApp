@@ -1,0 +1,14 @@
+# Node.js dependencies
+node_modules
+
+# Build artifacts
+client/build
+server/build
+
+# Environment variables
+.env
+
+# Editor and OS-specific files
+*.log
+.DS_Store
+.vscode/
