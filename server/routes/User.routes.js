@@ -8,4 +8,5 @@ module.exports = app => {
   app.post('/api/users/login', UserController.userLogin);
   app.post('/api/users/logout', UserController.userLogout);
   app.get('/api/users/authenticate', authenticate )
+  app.delete('/api/users/delete/:id', UserController.deleteUser)
 }

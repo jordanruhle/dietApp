@@ -2,7 +2,6 @@ const express = require('express');
 require('dotenv').config()
 const app = express();
 var bodyParser = require('body-parser');
-const multer  = require('multer');
 const { resolve } = require("path");
 const port = 8000;
 const DB = "dietApp"
@@ -29,5 +28,7 @@ require("./config/mongoose.config")(DB)
 // require("./routes/Meal.routes")(app)
 require("./routes/User.routes")(app)
 
+// Expose app for testing
+module.exports = app;
 
 app.listen(port, () => console.log(`Listening on port: ${port}`) );
