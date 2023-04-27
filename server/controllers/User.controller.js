@@ -9,7 +9,7 @@ module.exports.getAllUsers = async (req, res) => {
     const allUsers = await Users.find()
     res.json({users: allUsers})
   } catch (error) {
-    error => res.json({message: 'Something went wrong', error: error})
+    error => res.json({msg: 'Something went wrong', error: error})
   }
 }
 
@@ -19,7 +19,7 @@ module.exports.findoneSingleUser = async (req, res) => {
     const oneUser = await Users.findOne({ _id: req.params.id });
     res.json({ user: oneUser });
   } catch (error) {
-    res.json({message: 'Something went wrong', error: error})
+    res.json({msg: 'Something went wrong', error: error})
   }
 }
 
@@ -33,13 +33,16 @@ module.exports.createNewUser = async (req, res) => {
     const payload = {
       id: newUser._id
     }
-    const userToken = jwt.sign(payload, process.env.ADMIN_LOGIN_REG_SECRET_KEY)
+    const userToken = jwt.sign(payload, process.env.USER_LOGIN_REG_SECRET_KEY)
     console.log(userToken);
     res
-      .cookie("userToken", userToken, { domain: '.mountainbikes.store', httpOnly: true })
-      .json({ msg: "success!", user: user });
-  } catch (err) {
-    res.json(err)
+    res
+    .cookie('userToken', userToken, { httpOnly: true })
+    .status(200)
+    .json({ msg: 'success!', user: newUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json(error);
   }
 }
 
@@ -78,10 +81,10 @@ module.exports.userLogin = async (req, res) => {
     res
       .cookie("userToken", userToken, { httpOnly: true })
       .json({ msg: "login succesful" })
-  } catch (err) {
-    console.log(err);
-    // send err and error message
-    res.json(err)
+  } catch (error) {
+    console.log(error);
+    // send error and error message
+    res.json(error)
   }
 }
 
@@ -92,8 +95,21 @@ module.exports.userLogout = async (req, res) => {
     res
       .json({ msg: 'logout successful' })
       .sendStatus(200);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports.deleteUser = async (req, res) => {
+  try {
+    const deletedUser = await Users.deleteOne({ _id: req.params.id });
+    if (deletedUser.deletedCount > 0) {
+      res.json({ msg: 'User deleted successfully', result: deletedUser });
+    } else {
+      res.status(404).json({ msg: 'User not found', result: deletedUser });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: 'Something went wrong', error: error });
   }
 }
 
