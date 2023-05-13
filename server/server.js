@@ -24,8 +24,8 @@ app.use(express.static(process.env.STATIC_DIR));
 require("./config/mongoose.config")(DB)
 
 // modularize routes
-// require("./routes/Food.routes")(app)
-// require("./routes/Meal.routes")(app)
+require("./routes/Food.routes")(app)
+require("./routes/Meal.routes")(app)
 require("./routes/User.routes")(app)
 
 // Expose app for testing
