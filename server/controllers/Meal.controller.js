@@ -152,14 +152,16 @@ module.exports.updateMeal = async (req, res) => {
 // Delete Meal
 module.exports.deleteMeal = async (req, res) => {
   try {
+    console.log("deleteMeal meal id: " + req.params.id)
     const meal = await Meals.findById(req.params.id);
     if (meal) {
-      await meal.remove();
+      await Meals.deleteOne();
       res.json({ msg: 'Meal deleted successfully' });
     } else {
       res.status(404).json({ msg: 'Meal not found' });
     }
   } catch (error) {
+    console.log("deleteMeal Error: " + error)
     res.status(500).json({ msg: 'Something went wrong', error: error });
   }
 };
